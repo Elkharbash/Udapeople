@@ -85,7 +85,7 @@ jobs:
       - run: #Note that the --audit-level parameter above specifies the minimum vulnerability level that will cause the command to fail. This option does not filter the report output, it simply changes the command's failure threshold.
           name: Scan backend for vulnerabilites
           command: |
-            cd  
+            cd  backend
             npm audit --audit-level=critical
 workflows:
   UdapeopleCode:
