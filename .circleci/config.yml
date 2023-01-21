@@ -73,6 +73,7 @@ jobs:
           name: Scan frontend for vulnerabilites
           command: |
             cd frontend
+            npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
 
   scan-backend:
@@ -86,6 +87,7 @@ jobs:
           name: Scan backend for vulnerabilites
           command: |
             cd  backend
+            npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
 workflows:
   UdapeopleCode:
