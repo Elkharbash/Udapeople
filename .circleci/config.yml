@@ -7,7 +7,7 @@ commands: #adding slack orb for slack integration
   notify_on_failure:
     steps:
       - slack/notify:
-          even: fail
+          event: fail
           channel: cicd
           template: basic_fail_1
 
