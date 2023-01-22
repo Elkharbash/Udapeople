@@ -3,10 +3,10 @@ version: 2.1
 orbs:
   slack: circleci/slack@4.12.1
 
-  commands: #adding slack orb for slack integration
-    notify_on_failure:
-      steps:
-        - slack/notify:
+commands: #adding slack orb for slack integration
+  notify_on_failure:
+    steps:
+      - slack/notify:
           even: fail
           channel: cicd
           template: basic_fail_1
