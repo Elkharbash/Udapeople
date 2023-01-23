@@ -163,7 +163,7 @@ jobs:
           - ".circleci/ansible/inventory.txt"
     # Here's where you will add some code to rollback on failure  
     - destroy_environment:
-        WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}
+        workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
 
   notify_on_success: # success notification for slack integration
