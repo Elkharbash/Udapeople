@@ -15,6 +15,10 @@ commands: #adding slack orb for slack integration
       WORKFLOW_ID:  #double check this part and fix it
         type: string
     steps:
+      # - run:
+      #     name: delete the bucket
+      #     command: |
+      #       aws s3 rm
       - run:
           name: Destroy environment and cloud resources if anything fails
           when: on_fail
