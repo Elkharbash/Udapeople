@@ -155,17 +155,13 @@ jobs:
     - run:
         name: Add back-end ip to ansible inventory 
         command: |
-            INSTANCE_PUBLIC_IP=$(aws ec2 describe-instances \
-            --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --filters "Name=tag:Project,Values=udapeople" \
-            --output text)
-            echo $INSTANCE_PUBLIC_IP
+            INSTANCE_PUBLIC_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=udapeople" --output text)
             echo $INSTANCE_PUBLIC_IP >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
     - persist_to_workspace:
         root: ~/
         paths:
-          - project/.circleci/ansible/inventory.txt
+          - .circleci/ansible/inventory.txt
     # Here's where you will add some code to rollback on failure  
     - destroy_environment:
         workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
@@ -208,6 +204,7 @@ jobs:
           name: Run migrations
           command: |
             cd backend
+            npm install
             npm migrations > migrations_dump.txt
       - run:
           name: Send migration results to kvdb
@@ -220,6 +217,27 @@ jobs:
       - destroy_environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
+  deploy-frontend:
+    docker:
+      - image: amazon/aws=cli
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Install dependencies
+          command: |
+            sudo yum update
+            sudo yum install nodejs
+      
+      - run:
+          name: Get Backend url
+          command: |
+            export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=udapeople" --output text)
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "API_URL = ${API_URL}"
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            cat frontend/.env
 
      # Here's where you will add some code to rollback on failure      
 
@@ -246,6 +264,12 @@ workflows:
           requires: [build-backend]
       - deploy_infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
+      - deploy-frontend:
+          requires: [run-migrations]
       - notify_on_success:
           requires:
             - test-frontend
