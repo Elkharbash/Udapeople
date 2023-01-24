@@ -159,7 +159,8 @@ jobs:
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --filters "Name=tag:Project,Values=udapeople" \
             --output text)
-            echo ${INSTANCE_PUBLIC_IP} >> .circleci/ansible/inventory.txt
+            echo $INSTANCE_PUBLIC_IP
+            echo $INSTANCE_PUBLIC_IP >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
     - persist_to_workspace:
         root: ~/
