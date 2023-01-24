@@ -14,6 +14,7 @@ commands: #adding slack orb for slack integration
     parameters:
       workflow_id:  #double check this part and fix it
         type: string
+        default: ${CIRCLE_WORKFLOW_ID:0:7}
     steps:
       # - run:
       #     name: delete the bucket
@@ -154,51 +155,45 @@ jobs:
     - run:
         name: Add back-end ip to ansible inventory 
         command: |
-            aws ec2 describe-instances \
+            INSTANCE_PUBLIC_IP =$(aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --filters "Name=tag:Project,Values=udapeople" \
-            --output text >> ./.circleci/ansible/inventory.txt
+            --output text)
+            echo $INSTANCE_PUBLIC_IP >> .circleci/ansible/inventory.txt
+            cat .circleci/ansible/inventory.txt
     - persist_to_workspace:
-        root: .
+        root: ~/
         paths:
-          - ./.circleci/ansible/inventory.txt
+          - project/.circleci/ansible/inventory.txt
     # Here's where you will add some code to rollback on failure  
     - destroy_environment:
         workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
-  # configure-infrastructure:
-  #   docker:  # a docker image that is used for ansible
-  #    - image: python:3.7-alpine3.11
-  #    # Get the environment variables from CircleCI and add to the EC2 instance
-  #   # environment:
-  #   #   - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"
-  #   #   - TYPEORM_ENTITIES: "{{ lookup('env', 'TYPEORM_ENTITIES')}}"
-  #   #   - TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST')}}"
-  #   #   - TYPEORM_PORT: 5432
-  #   #   - TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME')}}"
-  #   #   - TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD')}}"
-  #   #   - TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE')}}"
-  #   #   - TYPEORM_MIGRATIONS: "{{ lookup('env', 'TYPEORM_MIGRATIONS')}}"
-  #   #   - TYPEORM_MIGRATIONS_DIR: "{{ lookup('env', 'TYPEORM_MIGRATIONS_DIR')}}"
-  #   steps:
-  #     - checkout
-  #     - add_ssh_keys:
-  #         fingerprints:
-  #           - "9b:af:03:7d:48:35:2e:88:e8:72:86:70:14:a6:8b:2a"
-  #     - attach_workspace:
-  #         at: .
+  configure-infrastructure:
+    docker:  # a docker image that is used for ansible
+     - image: python:3.7-alpine3.11
+     # Get the environment variables from CircleCI and add to the EC2 instance
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["9b:af:03:7d:48:35:2e:88:e8:72:86:70:14:a6:8b:2a"]
+      - attach_workspace:
+          at: ~/
       
-  #     - run:
-  #         name: Install dependencies
-  #         command: |
-  #           # Your code here
-  #           exit 1
-  #     - run:
-  #         name: Configure server
-  #         command: |
-  #           # Your code here
-  #           exit 1
+      - run:
+          name: Install dependencies
+          command: |
+              apk add --update ansible
+              apk add --no-cache aws-cli
 
+            
+      - run:
+          name: Configure server
+          command: |
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
+      - destroy_environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   notify_on_success: # success notification for slack integration
     docker:
