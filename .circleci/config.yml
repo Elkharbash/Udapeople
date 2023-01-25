@@ -23,7 +23,7 @@ commands: #adding slack orb for slack integration
             echo "Destroying environment: << parameters.workflow_id >> "
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.workflow_id >> 
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.workflow_id >>
-            aws s3 rm s3://udapeople-<<parameters.Workflow_ID>> --recursive
+            aws s3 rm s3://udapeople-<<parameters.workflow_id>> --recursive
 
   revert-migrations:
     description: Revert the last migration
