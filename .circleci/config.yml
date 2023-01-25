@@ -10,7 +10,7 @@ commands: #adding slack orb for slack integration
           event: fail
           channel: cicd
           template: basic_fail_1
-  destroy_environment:
+  destroy-environment:
     parameters:
       workflow_id:  #double check this part and fix it
         type: string
@@ -30,6 +30,7 @@ commands: #adding slack orb for slack integration
     parameters:
         workflow_id:
             type: string      
+            default: ${CIRCLE_WORKFLOW_ID:0:7}
     steps:
         - run:
             name: Revert migrations
@@ -204,7 +205,7 @@ jobs:
           - project/.circleci/ansible/inventory.txt
     # Here's where you will add some code to rollback on failure  
     - notify_on_failure
-    - destroy_environment:
+    - destroy-environment:
         workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   configure-infrastructure:
@@ -231,7 +232,7 @@ jobs:
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml
       - notify_on_failure
-      - destroy_environment:
+      - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   run-migrations:
@@ -255,7 +256,7 @@ jobs:
             curl https://kvdb.io/5hj8MRZPpML4XiRb1Q3k4J/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
            fi
 
-      - destroy_environment:
+      - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
 
@@ -291,7 +292,7 @@ jobs:
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
      # Here's where you will add some code to rollback on failure      
-      - destroy_environment:
+      - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
 
