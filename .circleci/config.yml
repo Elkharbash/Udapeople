@@ -253,6 +253,7 @@ jobs:
             npm install
             npm i migrations
             npm run migrations > migrations_dump.txt
+            return 0
       - run:
           name: Send migration results to your kvdb
           command: |
