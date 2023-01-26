@@ -65,9 +65,9 @@ commands: #adding slack orb for slack integration
           name: Download and install ansible and python
           command: |
             sudo apt update
-            sudo apt install software-properties-common -y
-            sudo add-apt-repository --yes --update ppa:ansible/ansible
-            sudo apt install -y python3
+            # sudo apt install software-properties-common -y
+            # sudo add-apt-repository --yes --update ppa:ansible/ansible
+            # sudo apt install -y python3
             sudo apt install ansible -y
 
 #add 2 more commands, 1 for installing aws cli and the 2nd to install python and ansible
@@ -301,7 +301,7 @@ jobs:
 
   deploy-backend:
     docker:
-      - image: circleci/node:13.8.0 # change to circleci node and install ansible
+      - image: python:3.7-alpine3.11 #circleci/node:13.8.0 # change to circleci node and install ansible
     steps:
       - checkout
       - add_ssh_keys:
@@ -310,8 +310,8 @@ jobs:
           at: ~/
       - restore_cache:
           keys: [backend-deps]
-      - install_aws
-      - install_ansible
+      # - install_aws
+      # - install_ansible
       # - run:
       #     name: install aws cli
       #     command: |
@@ -320,10 +320,10 @@ jobs:
       #       curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
       #       unzip awscliv2.zip
       #       sudo ./aws/install
-      # - run:
-      #     name: install ansible
-      #     command: |
-      #       apk add --update ansible
+      - run:
+          name: install ansible
+          command: |
+            apk add --update ansible
       - run:
           name: install npm
           command: |
