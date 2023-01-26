@@ -240,7 +240,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - install_aws
@@ -251,8 +251,6 @@ jobs:
           command: |
             cd backend
             npm install
-            npm install oauth-sign@^0.9.0
-            npm audit fix --force
             npm run migrations > migrations_dump.txt
       - run:
           name: Send migration results to your kvdb
@@ -261,7 +259,6 @@ jobs:
            then
             curl https://kvdb.io/5hj8MRZPpML4XiRb1Q3k4J/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
            fi
-
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
