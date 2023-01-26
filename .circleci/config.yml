@@ -244,13 +244,15 @@ jobs:
     steps:
       - checkout
       - install_aws
-      # - restore_cache:
-      #     keys: [backend-build]
+      - restore_cache:
+          keys: [backend-build]
       - run:
           name: Run migrations
           command: |
             cd backend
+            npm cache clean --force
             npm install
+            npm update
             npm i migrations
             npm run migrations > migrations_dump.txt
             return 0
