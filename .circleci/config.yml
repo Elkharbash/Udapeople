@@ -199,12 +199,12 @@ jobs:
         name: Add back-end ip to ansible inventory 
         command: |
             INSTANCE_PUBLIC_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=udapeople" --output text)
-            echo $INSTANCE_PUBLIC_IP >> .circleci/ansible/inventory.txt
-            cat .circleci/ansible/inventory.txt
+            echo $INSTANCE_PUBLIC_IP >> /home/circleci/project/.circleci/ansible/inventory.txt
+            cat /home/circleci/project/.circleci/ansible/inventory.txt
     - persist_to_workspace:
         root: ~/
         paths:
-          - project/.circleci/ansible/inventory.txt
+          - /home/circleci/project/.circleci/ansible/inventory.txt
     # Here's where you will add some code to rollback on failure  
     - notify_on_failure
     - destroy-environment:
@@ -301,7 +301,7 @@ jobs:
 
   deploy-backend:
     docker:
-      - image: python:3.7-alpine3.11 #circleci/node:13.8.0 # change to circleci node and install ansible
+      - image: circleci/node:13.8.0 #python:3.7-alpine3.11 # change to circleci node and install ansible
     steps:
       - checkout
       - add_ssh_keys:
@@ -310,8 +310,8 @@ jobs:
           at: ~/
       - restore_cache:
           keys: [backend-deps]
-      # - install_aws
-      # - install_ansible
+      - install_aws
+      - install_ansible
       # - run:
       #     name: install aws cli
       #     command: |
@@ -320,10 +320,10 @@ jobs:
       #       curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
       #       unzip awscliv2.zip
       #       sudo ./aws/install
-      - run:
-          name: install ansible
-          command: |
-            apk add --update ansible
+      # - run:
+      #     name: install ansible
+      #     command: |
+      #       apk add --update ansible
       - run:
           name: install npm
           command: |
