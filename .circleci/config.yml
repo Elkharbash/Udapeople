@@ -210,7 +210,7 @@ jobs:
 
   configure-infrastructure:
     docker:  # a docker image that is used for ansible
-     - image: python:3.7-alpine3.11 # change to circleci image and intsall ansible
+     - image: circleci/node:13.8.0 # change to circleci image and intsall ansible
      # Get the environment variables from CircleCI and add to the EC2 instance
     steps:
       - checkout
@@ -219,10 +219,11 @@ jobs:
       - attach_workspace:
           at: ~/
       - install_aws
-      - run:
-          name: Install dependencies
-          command: |
-              apk add --update ansible
+      - install_ansible
+      # - run:
+      #     name: Install dependencies
+      #     command: |
+      #         apk add --update ansible
 
             
       - run:
