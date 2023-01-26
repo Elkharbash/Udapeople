@@ -4,11 +4,6 @@
   apt:
     update_cache: yes
 
-- name: Remove any dependencies that are not required
-  become: true
-  apt:
-    autoremove: yes
-
 - name: Install npm and node
   become: true
   apt:
