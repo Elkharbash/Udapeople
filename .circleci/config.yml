@@ -69,6 +69,7 @@ commands: #adding slack orb for slack integration
             # sudo add-apt-repository --yes --update ppa:ansible/ansible
             # sudo apt install -y python3
             sudo apt install ansible -y
+            ansible --version
 
 #add 2 more commands, 1 for installing aws cli and the 2nd to install python and ansible
 
@@ -216,12 +217,12 @@ jobs:
      # Get the environment variables from CircleCI and add to the EC2 instance
     steps:
       - checkout
+      - install_aws
+      - install_ansible
       - add_ssh_keys:
           fingerprints: ["9b:af:03:7d:48:35:2e:88:e8:72:86:70:14:a6:8b:2a"]
       - attach_workspace:
           at: ~/
-      - install_aws
-      - install_ansible
       # - run:
       #     name: Install dependencies
       #     command: |
@@ -234,7 +235,6 @@ jobs:
             cd .circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml
-      - notify_on_failure
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
