@@ -243,6 +243,7 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - install_aws
       - restore_cache:
           keys: [backend-build]
       - run:
@@ -250,6 +251,8 @@ jobs:
           command: |
             cd backend
             npm install
+            npm install oauth-sign@^0.9.0
+            npm audit fix --force
             npm run migrations > migrations_dump.txt
       - run:
           name: Send migration results to your kvdb
