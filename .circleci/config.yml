@@ -67,8 +67,9 @@ commands: #adding slack orb for slack integration
             sudo apt update
             sudo apt install software-properties-common -y
             sudo add-apt-repository --yes --update ppa:ansible/ansible
-            sudo apt install ansible -y
             sudo apt install -y python3
+            sudo apt install ansible -y
+
 #add 2 more commands, 1 for installing aws cli and the 2nd to install python and ansible
 
 
