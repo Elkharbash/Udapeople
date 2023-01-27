@@ -312,18 +312,6 @@ jobs:
           keys: [backend-deps]
       - install_aws
       - install_ansible
-      # - run:
-      #     name: install aws cli
-      #     command: |
-      #       sudo apk update
-      #       apk add zip
-      #       curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-      #       unzip awscliv2.zip
-      #       sudo ./aws/install
-      # - run:
-      #     name: install ansible
-      #     command: |
-      #       apk add --update ansible
       - run:
           name: install npm
           command: |
@@ -334,9 +322,13 @@ jobs:
           command: |
             cd backend
             npm run build
-            tar -czf artifact.tar.gz dist/* package*
-            cd ..
-            cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
+            tar -C backend -czvf artifact.tar.gz .
+            mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
+            mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
+            # cd  .circleci/ansible
+            # tar -czvf artifact.tar.gz dist/* package*
+            # cd ..
+            # cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
       - run:
           name: Deploy backend
           command: |
