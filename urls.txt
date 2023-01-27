@@ -1,4 +1,4 @@
 [URL01] github repo url: https://github.com/Elkharbash/Udapeople
 [URL02] S3 Bucket: http://udapeople-31fe62e.s3-website-us-east-1.amazonaws.com/#/employees
 [URL03] cloudfront: d3o7s6o1agttqt.cloudfront.net
-[URL04] server status: http://34.204.95.34:3030/api/status
+[URL04] server status: http://100.26.217.149:3030/api/status
