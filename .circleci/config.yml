@@ -403,12 +403,12 @@ jobs:
             export OLD_WORKFLOW_ID=$(aws cloudformation \
             list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
             --no-paginate --output text)
-            echo "Old Wokflow ID: $OLD_WORKFLOW_ID"
+            echo "Old Wokflow ID: ${OLD_WORKFLOW_ID}"
             curl --insecure https://kvdb.io/5hj8MRZPpML4XiRb1Q3k4J/old_workflow_id -d "${OLD_WORKFLOW_ID}"
             aws cloudformation deploy \
               --template-file .circleci/files/cloudfront.yml \
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
-              --stack-name UdapeopleApp \
+              --stack-name InitialStack \
               --tags project=udapeople
 
 
