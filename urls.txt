@@ -1,2 +1,3 @@
-github repo url: https://github.com/Elkharbash/Udapeople
-kvdb bucket: 5hj8MRZPpML4XiRb1Q3k4J
+[URL01] github repo url: https://github.com/Elkharbash/Udapeople
+[URL02] S3 Bucket
+[URL03] cloudfront 
