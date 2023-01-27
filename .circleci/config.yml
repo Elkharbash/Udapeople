@@ -308,7 +308,7 @@ jobs:
           fingerprints: ["9b:af:03:7d:48:35:2e:88:e8:72:86:70:14:a6:8b:2a"]
       - attach_workspace:
           at: ~/
-      - restore_cache:
+      - restore_cache: 
           keys: [backend-deps]
       - install_aws
       - install_ansible
@@ -365,7 +365,7 @@ jobs:
               --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-            if curl" $API_URL/api/status" | grep "ok"
+            if curl "$API_URL/api/status" | grep "ok"
             then
               return 0
             else
