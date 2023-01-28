@@ -1,0 +1,15 @@
+# follow this guide to learn how to install prometheus on an ec2 instance.  https://towardsaws.com/getting-started-with-prometheus-part-2-installation-of-prometheus-on-ec2-instance-b0fcb6201bb3
+# Note that there is a minor mistake in this guide, when doing the $tar command, add .tar.gz at the end of the file name that you are going to unzip
+
+global:
+  scrape_interval: 15s
+  external_labels:
+    monitor: 'prometheus'
+
+scrape_configs:
+
+  - job_name: 'node_exporter'
+
+    static_configs:
+
+      - targets: ['ec2-34-207-190-47.compute-1.amazonaws.com:9100']
