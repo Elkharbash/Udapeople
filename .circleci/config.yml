@@ -151,8 +151,9 @@ jobs:
           command: |
             cd frontend
             npm install oauth-sign@^0.9.0
-            npm audit fix --force
-            #npm audit --audit-level=critical
+            npm audit fix --force --audit-level=critical
+            npm audit fix
+            npm audit --audit-level=critical
       - notify_on_failure
 
   scan-backend:
@@ -167,8 +168,9 @@ jobs:
           command: |
             cd  backend
             npm install oauth-sign@^0.9.0
-            npm audit fix --force
-            #npm audit --audit-level=critical
+            npm audit fix --force --audit-level=critical
+            npm audit fix
+            npm audit --audit-level=critical
       - notify_on_failure
 
   deploy-infrastructure:
@@ -430,12 +432,13 @@ jobs:
                 --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
             echo Stack names: "${STACKS[@]}"
             export OldWorkflowID=$(curl --insecure https://kvdb.io/5hj8MRZPpML4XiRb1Q3k4J/old_workflow_id)
-            echo Old Workflow ID: $OldWorkflowID 
+            echo Old Workflow ID: $OldWorkflowID
+            echo "s3://udapeople-${OldWorkflowID}"
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
-              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+              aws s3 rm --recursive "s3://udapeople-${OldWorkflowID}"
             fi
 
   notify_on_success: # success notification for slack integration
@@ -461,9 +464,9 @@ workflows:
           requires: [build-frontend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          # filters:
-          #   branches:
-          #     only: [test-feature-branch]
+          filters:
+            branches:
+              only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
       - run-migrations:
