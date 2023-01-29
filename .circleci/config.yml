@@ -164,7 +164,7 @@ jobs:
       - checkout
       - restore_cache:
           keys: [backend-build]
-      - run: #Note that the --audit-level parameter above specifies the minimum vulnerability level that will cause the command to fail. This option does not filter the report output, it simply changes the command's failure threshold.
+      - run: ##Note that the --audit-level parameter above specifies the minimum vulnerability level that will cause the command to fail. This option does not filter the report output, it simply changes the command's failure threshold.
           name: Scan backend for vulnerabilites
           command: |
             cd  backend
