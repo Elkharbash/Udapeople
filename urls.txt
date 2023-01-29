@@ -3,3 +3,4 @@
 [URL03] cloudfront: https://d3o7s6o1agttqt.cloudfront.net/#/employees
 [URL04] server status: http://18.234.188.206:3030/api/status
 [URL05] Prometheus Server: http://18.204.9.250:9090
+[URL06] alertmanager : http://ec2-34-205-25-114.compute-1.amazonaws.com:9090/alerts

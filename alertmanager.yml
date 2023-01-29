@@ -10,5 +10,5 @@ route:
 receivers:
 - name: 'slack-notifications'
   slack_configs:
-  - channel: '#monitoring-instances'
+  - channel: '#monitoring_infra_alerts'
     send_resolved: true
