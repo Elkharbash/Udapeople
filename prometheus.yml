@@ -1,0 +1,18 @@
+#prometheus.yml file
+
+global:
+  scrape_interval: 15s
+  external_labels:
+    monitor: 'prometheus'
+
+rule_files:
+  - rules.yml
+alerting:
+  alertmanagers:
+    - static_configs:
+      - targets:
+        - localhost:9093
+scrape_configs:
+  - job_name: 'node_exporter'
+    static_configs:
+      - targets: ['ec2-18-234-188-206.compute-1.amazonaws.com:9100']
