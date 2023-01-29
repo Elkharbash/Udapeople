@@ -37,7 +37,7 @@ commands: #adding slack orb for slack integration
             when: on_fail
             command: |
                 # Your Memstash or kvdb.io GET URL code goes here
-                SUCCESS=$(curl --insecure  https://kvdb.io/5hj8MRZPpML4XiRb1Q3k4J/migration_<< parameters.workflow_id >>)
+                SUCCESS=$(curl --insecure  https://kvdb.io/6YvxgNRJXKXjyQGg3396RH/migration_<< parameters.workflow_id >>)
                 # Logic for reverting the database state
                 if (( $SUCCESS == 1 ));
                 then
@@ -261,7 +261,7 @@ jobs:
           command: |
            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
            then
-            curl --insecure https://kvdb.io/5hj8MRZPpML4XiRb1Q3k4J/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+            curl --insecure https://kvdb.io/6YvxgNRJXKXjyQGg3396RH/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
            fi
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
@@ -409,7 +409,7 @@ jobs:
             list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
             --no-paginate --output text)
             echo "Old Wokflow ID: ${OLD_WORKFLOW_ID}"
-            curl --insecure https://kvdb.io/5hj8MRZPpML4XiRb1Q3k4J/old_workflow_id -d "${OLD_WORKFLOW_ID}"
+            curl --insecure https://kvdb.io/6YvxgNRJXKXjyQGg3396RH/old_workflow_id -d "${OLD_WORKFLOW_ID}"
             aws cloudformation deploy \
               --template-file .circleci/files/cloudfront.yml \
               --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
@@ -426,54 +426,54 @@ jobs:
     steps:
       - checkout
       - install_aws
-      - run:
-          name: Get old workflow ID and remove old stacks and files
-          command: |
-            export  OLD_WORKFLOW_ID=$(curl --insecure https://kvdb.io/5hj8MRZPpML4XiRb1Q3k4J/old_workflow_id)
-            OLD_WORKFLOW_ID=$(curl --insecure https://kvdb.io/5hj8MRZPpML4XiRb1Q3k4J/old_workflow_id)
-            echo "OLD_WORKFLOW_ID=$OLD_WORKFLOW_ID"
-            NEW_WORKFLOW_ID=${CIRCLE_WORKFLOW_ID:0:7}
-            echo "NEW_WORKFLOW_ID=$NEW_WORKFLOW_ID"
-            if [ -z "$OLD_WORKFLOW_ID" ]
-            then
-                echo "No OLD_WORKFLOW_ID found, nothing to cleanup."
-            else
-                if [[ "$NEW_WORKFLOW_ID" != "$OLD_WORKFLOW_ID" ]]
-                then
-                    echo "$OLD_WORKFLOW_ID!=$NEW_WORKFLOW_ID: the old stack and files are going to be deleted"
-                    aws s3 rm "s3://${OLD_WORKFLOW_ID}" --recursive
-                    aws cloudformation delete-stack --stack-name "udapeople-frontend-${OLD_WORKFLOW_ID}"
-                    aws cloudformation delete-stack --stack-name "udapeople-backend-${OLD_WORKFLOW_ID}"
-                else
-                    echo "$OLD_WORKFLOW_ID==$NEW_WORKFLOW_ID: the old and new stacks are the same, no changes applied"
-                fi
-            fi
-        # - run: 
-      #     name: Get old stack workflow id and Remove old stacks and files
+      # - run:
+      #     name: Get old workflow ID and remove old stacks and files
       #     command: |
-      #       # export STACKS=($(aws cloudformation list-stacks \
-      #       #     --query "StackSummaries[*].StackName" \
-      #       #     --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
-      #       # echo Stack names: "${STACKS[@]}"
-      #       export OldWorkflowID=$(curl --insecure https://kvdb.io/5hj8MRZPpML4XiRb1Q3k4J/old_workflow_id)
-      #       # echo Old Workflow ID: $OldWorkflowID
-      #       # echo "s3://udapeople-${OldWorkflowID}"
-      #       # Fetch the Old workflow ID
-      #       # export OldWorkflowID=$(aws cloudformation \
-      #       #         list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-      #       #         --no-paginate --output text)
-      #       echo OldWorkflowID: "${OldWorkflowID}"
-      #       echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
-      #       # Fetch the stack names          
-      #       export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
-      #               --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
-      #       echo Stack names: "${STACKS[@]}"                      
-      #       if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
-      #       then
-      #         aws s3 rm --recursive "s3://udapeople-${OldWorkflowID}"
-      #         aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
-      #         aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
-      #       fi
+            # export  OLD_WORKFLOW_ID=$(curl --insecure https://kvdb.io/6YvxgNRJXKXjyQGg3396RH/old_workflow_id)
+            # OLD_WORKFLOW_ID=$(curl --insecure https://kvdb.io/6YvxgNRJXKXjyQGg3396RH/old_workflow_id)
+            # echo "OLD_WORKFLOW_ID=$OLD_WORKFLOW_ID"
+            # NEW_WORKFLOW_ID=${CIRCLE_WORKFLOW_ID:0:7}
+            # echo "NEW_WORKFLOW_ID=$NEW_WORKFLOW_ID"
+            # if [ -z "$OLD_WORKFLOW_ID" ]
+            # then
+            #     echo "No OLD_WORKFLOW_ID found, nothing to cleanup."
+            # else
+            #     if [[ "$NEW_WORKFLOW_ID" != "$OLD_WORKFLOW_ID" ]]
+            #     then
+            #         echo "$OLD_WORKFLOW_ID!=$NEW_WORKFLOW_ID: the old stack and files are going to be deleted"
+            #         aws s3 rm "s3://${OLD_WORKFLOW_ID}" --recursive
+            #         aws cloudformation delete-stack --stack-name "udapeople-frontend-${OLD_WORKFLOW_ID}"
+            #         aws cloudformation delete-stack --stack-name "udapeople-backend-${OLD_WORKFLOW_ID}"
+            #     else
+            #         echo "$OLD_WORKFLOW_ID==$NEW_WORKFLOW_ID: the old and new stacks are the same, no changes applied"
+            #     fi
+            # fi
+      - run: 
+          name: Get old stack workflow id and Remove old stacks and files
+          command: |
+            # export STACKS=($(aws cloudformation list-stacks \
+            #     --query "StackSummaries[*].StackName" \
+            #     --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
+            # echo Stack names: "${STACKS[@]}"
+            export OldWorkflowID=$(curl --insecure https://kvdb.io/6YvxgNRJXKXjyQGg3396RH/old_workflow_id)
+            # echo Old Workflow ID: $OldWorkflowID
+            # echo "s3://udapeople-${OldWorkflowID}"
+            # Fetch the Old workflow ID
+            # export OldWorkflowID=$(aws cloudformation \
+            #         list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+            #         --no-paginate --output text)
+            echo OldWorkflowID: "${OldWorkflowID}"
+            echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
+            # Fetch the stack names          
+            export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
+                    --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
+            echo Stack names: "${STACKS[@]}"                      
+            if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
+            then
+              aws s3 rm --recursive "s3://udapeople-${OldWorkflowID}"
+              aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
+              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+            fi
 
   notify_on_success: # success notification for slack integration
     docker:
