@@ -1,6 +1,6 @@
 [URL01] github repo url: https://github.com/Elkharbash/Udapeople
-[URL02] S3 Bucket: http://udapeople-16b9713.s3-website-us-east-1.amazonaws.com/#/employees
+[URL02] S3 Bucket: http://udapeople-c2251a9.s3-website-us-east-1.amazonaws.com/#/employees
 [URL03] cloudfront: https://d2vp09qplkwjrt.cloudfront.net
-[URL04] server status: http://18.234.188.206:3030/api/status
-[URL05] Prometheus Server: http://18.204.9.250:9090
-[URL06] alertmanager : http://ec2-34-205-25-114.compute-1.amazonaws.com:9090/alerts
+[URL04] Production server status: http://18.205.158.123:3030/api/status
+[URL05] Prometheus Server: http://100.27.19.239:9090
+[URL06] alertmanager : http://100.27.19.239:9090/alerts
