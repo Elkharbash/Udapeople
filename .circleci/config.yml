@@ -150,7 +150,7 @@ jobs:
           name: Scan frontend for vulnerabilites
           command: |
             cd frontend
-            #npm install oauth-sign@^0.9.0
+            npm install oauth-sign@^0.9.0
             npm install
             npm audit fix --force --audit-level=critical
             npm audit fix
@@ -168,7 +168,7 @@ jobs:
           name: Scan backend for vulnerabilites
           command: |
             cd  backend
-            #npm install oauth-sign@^0.9.0
+            npm install oauth-sign@^0.9.0
             npm install
             npm audit fix --force --audit-level=critical
             npm audit fix
