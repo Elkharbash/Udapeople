@@ -12,3 +12,17 @@ receivers:
   slack_configs:
   - channel: '#monitoring_infra_alerts'
     send_resolved: true
+
+route:
+  group_by: [Alertname]
+  receiver: email-me
+
+receivers:
+- name: email-me
+  email_configs:
+  - to: n.elkharbash@gmail.com
+    from: nabkh94@gmail.com
+    smarthost: smtp.gmail.com:587
+    auth_username: nabkh94@gmail.com
+    auth_identity: nabkh94@gmail.com
+    auth_password: aqszebkpagwkmhmb
