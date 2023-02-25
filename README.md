@@ -28,12 +28,6 @@ The project is designed to showcase my skills and knowledge in the area of DevOp
 
 ## Installation
 
-Install my-project with npm
-
-```bash
-  npm install my-project
-  cd my-project
-```
 To install and deploy Udapeople project, follow these steps:
 
 1. Clone the repository from GitHub:
